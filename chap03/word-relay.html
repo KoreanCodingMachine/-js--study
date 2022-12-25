@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>끝말잇기</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div><span id="order">1</span>번째 참가자</div>
+    <div>제시어:<span id="word"></span></div>
+    <input type="text" />
+    <button type="button">입력</button>
+
+    <script>
+
+        // 1.몇명이서 게임을 진행할건지 숫자를 입력받는다.
+        // 2.참가자간의 순서를 정한다.(1 2 3 4 ...)
+        // 3.참가자에게 단어를 입력받는데 만약 첫번째 참가자인 경우 단어를 입력받고 다음 참가자에게 넘어가고
+        // 4.처음 참가자가 아닌경우 이전 참가자와 끝말있기 룰에 의해 단어를 비교한다.
+        /* 
+            5.끝말잇기 통과시 참가자의 수 만큼 순서가 1씩 증가하며 돌아가야 함으로 (1번 참가자부터 있다고 가정했을때) 
+            예를들어 3명 참가시 order가 1부터 시작한다고 했을때 1 2 3 1 2 3 이런식으로 돌아가야 한다. 
+            이때는 분기가  참가자수 만큼 끊김으로 현재 order+1 > number 가 될때 order를 1로 초기화시켜주면 된다. 
+        */
+        // 6.입력을 했을때 실패했든 성공했든 인풋창을 초기화 시켜주고 자동으로 포커스가게 해준다.(사용자의 편의를 위해)
+
+
+        const number = Number(prompt('몇 명이 참가할 것인가요'))
+        const $input = document.querySelector('input')
+        const $button = document.querySelector('button')
+        const $order = document.querySelector('#order')
+        const $word = document.querySelector('#word')
+
+        // 처음 참가자에게 받은 단어인지 아닌지를 판별해야 한다. 
+
+        let word // 제시어
+        let newWord // 입력한 단어
+
+        const onInput = (event) => {
+            newWord = event.target.value
+        }
+
+        const onClickButton = () => {
+            // 처음 사용자이면
+            if (!word || word[word.length - 1] === newWord[0]) {
+                // 입력한 단어가 제시어가 된다.
+                word = newWord
+                $word.textContent = newWord
+                // 순서 정하기
+                const order = Number($order.textContent)
+                if (order + 1 > number) {
+                    $order.textContent = 1
+                } else {
+                    $order.textContent = order + 1
+                }
+            }
+            // 처음 사용자가 아니면
+            else {
+                alert('당신은 틀렸어요')
+                $word.textContent = ''
+                $order.textContent = 1
+            }
+            $input.value = ''
+            $input.focus()
+        }
+
+
+        $input.addEventListener('input', onInput)
+
+        $button.addEventListener('click', onClickButton)
+
+
+
+    </script>
+</body>
+
+</html>
