@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>숫자야구 게임</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <form id="form">
+        <input type="text" id="input" required minlength="4" maxlength="4">
+        <button>확인</button>
+    </form>
+    <div id="logs"></div>
+
+    <script>
+        const $input = document.querySelector('#input')
+        const $form = document.querySelector('#form')
+        const $logs = document.querySelector('#logs')
+
+        const numbers = []
+        for (let n = 1; n <= 9; n++) {
+            numbers.push(n) // 1~9까지의 임의의 숫자
+        }
+
+        const answer = []
+        for (let n = 0; n <= 3; n++) {
+            const index = Math.floor(Math.random() * numbers.length)
+            answer.push(numbers[index])
+            numbers.splice(index, 1)
+        }
+
+        const tries = []
+
+        function checkInput(input) {
+            // 글자가 4글자 인가 
+            if (input.length !== 4) {
+                return alert('4자리 숫자를 입력해 주세요.')
+            }
+            // 중복된 숫자가 없는가
+            if (new Set(input).size !== 4) {
+                return alert('중복되지 않게 입력해 주세요')
+            }
+            // 이미 시도했던 값은 아닌가 
+            if (tries.includes(input)) {
+                return alert('이미 시도한 값입니다.')
+            }
+            return true;
+        }
+        $form.addEventListener('submit', event => {
+            // form 태그는 submit 이벤트가 발생하면 브라우저를 새로고침 하는데
+            // 새로고침하면 모든것이 초기화가 되기 때문에 기본 동작을 막아줘야 함 
+            event.preventDefault()
+            const value = $input.value; // value의 타입은 문자열 
+            $input.value = '';
+            const valid = checkInput(value)
+            if (!valid) return;
+            if (answer.join('') === value) {
+                $logs.textContent = '홈런!'
+                return;
+            }
+            if (tries.length >= 9) {
+                const message = document.createTextNode(`패배! 정답은 ${answer.join('')}`)
+                $logs.appendChild(message)
+                return;
+            }
+
+            // 몇 스트라이크 몇 볼인지 검사
+
+            let strike = 0;
+
+            let ball = 0;
+
+            for (let i = 0; i < answer.length; i++) {
+                const index = value.indexOf(answer[i])
+                if (index > -1) {
+                    if (index === i) {
+                        strike += 1
+                    } else {
+                        ball += 1
+                    }
+                }
+            }
+            $logs.append(`${value}:${strike} 스트라이크 ${ball} 볼`, document.createElement('br'))
+            tries.push(value)
+        })
+
+    </script>
+</body>
+
+</html>
