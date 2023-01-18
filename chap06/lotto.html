@@ -51,12 +51,30 @@
         const $bonus = document.querySelector('#bonus')
 
 
+        const makeColor = (number, $ball) => {
+            if (number < 10) {
+                $ball.style.backgroundColor = 'red'
+            } else if (number >= 10 && number < 20) {
+                $ball.style.backgroundColor = 'orange'
+            } else if (number >= 20 && number < 30) {
+                $ball.style.backgroundColor = 'yellow'
+            } else if (number >= 30 && number < 40) {
+                $ball.style.backgroundColor = 'blue'
+            } else {
+                $ball.style.backgroundColor = 'green'
+            }
+        }
+
         const makeBall = (number, $parent) => {
             const $ball = document.createElement('div')
             $ball.className = 'ball'
             $ball.textContent = number
+            makeColor(number, $ball)
             $parent.appendChild($ball)
         }
+
+
+
 
         for (let i = 0; i < 6; i++) {
             setTimeout(() => {
