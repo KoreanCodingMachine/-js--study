@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>반응속도</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        #screen {
+            width: 500px;
+            height: 500px;
+            text-align: center;
+            user-select: none;
+            line-height: 30;
+        }
+
+        #screen.waiting {
+            background-color: aqua;
+        }
+
+        #screen.ready {
+            background-color: red;
+            color: white;
+        }
+
+        #screen.now {
+            background-color: greenyellow;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 30px;
+            color: brown;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div>
+            <div id="screen" class="waiting">클릭해서 시작하세요</div>
+            <div id="result"></div>
+        </div>
+    </div>
+    <script>
+        const $screen = document.querySelector('#screen')
+        const $result = document.querySelector('#result')
+
+        let startTime
+        let endTime
+        let timeoutId
+        const records = []
+
+        $screen.addEventListener('click', () => {
+            if ($screen.classList.contains('waiting')) {
+                // 대기화면일때 준비 화면으로 전환 
+                $screen.classList.replace('waiting', 'ready')
+                $screen.textContent = '초록색이 되면 클릭하세요'
+                // 준비화면에서 임의의 시간차를 두고 클릭화면으로 전환 2,3초 사이에 
+                timeoutId = setTimeout(() => {
+                    startTime = new Date()
+                    $screen.classList.remove('ready')
+                    $screen.classList.add('now')
+                    $screen.textContent = '클릭하세요'
+                }, Math.floor(Math.random() * 1000) + 2000)
+            } else if ($screen.classList.contains('ready')) {
+                // 너무 성급하게 클릭햇을 시 
+                // 타이머를 멈추고 , 준비 화면(파랑)화면으로 돌아가게 함 
+                // 텍스트 출력 
+                clearTimeout(timeoutId)
+                $screen.classList.replace('ready', 'waiting')
+                $result.textContent = '좀 기다려봐 친구야 천천히 해야디'
+            } else if ($screen.classList.contains('now')) {
+                endTime = new Date()
+                const current = endTime - startTime
+                records.push(current)
+                const average = records.reduce((a, c) => a + c) / records.length
+                $result.textContent = `현재 ${current}   평균 ${average}ms`
+                startTime = null
+                endTime = null
+                $screen.classList.remove('now')
+                $screen.classList.add('waiting')
+                $screen.textContent = '클릭해서 시작하세요'
+            }
+        })
+
+    </script>
+</body>
+
+</html>
