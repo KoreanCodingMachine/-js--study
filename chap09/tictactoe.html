@@ -82,7 +82,6 @@
 
         // 차례 생성하기
         let turn = 'o'
-        let computerChoice = 'x'
 
         const callback = (event) => {
             if (event.target.textContent !== '') {
@@ -112,21 +111,27 @@
             turn = turn === 'o' ? 'x' : 'o'
 
             if (turn === 'x') {
-                const emptyCells = rows.flat().filter((v) => !v.textContent)
-                const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)]
+                const filterdArray = rows.flat().filter((v) => !v.textContent)
+                const randomCell = filterdArray[Math.floor(Math.random() * filterdArray.length)]
                 randomCell.textContent = 'x'
-                const hasWinner = checkWinner(randomCell)
+                // 승자 판별
+                const hasWinner = checkWinner(event.target)
 
                 if (hasWinner) {
-                    $result.textContent = `${turn}님이 승리`
+                    $result.textContent = `${turn}님이 승자입니다.`
+                    $table.removeEventListener('click', callback)
                     return
                 }
 
-                const draw = rows.flat().every(cell => cell.textContent)
+                // 무승부일때
+                const draw = rows.flat().every(td => td.textContent)
+
                 if (draw) {
-                    $result.textContent = '무승부'
+                    $result.textContent = '무승부입니다.'
                     return
                 }
+
+                // 턴 교체
                 turn = turn === 'o' ? 'x' : 'o'
             }
 
@@ -152,8 +157,6 @@
             $table.appendChild($tr)
             $table.addEventListener('click', callback)
         }
-
-
 
         body.appendChild($table)
         body.appendChild($result)
