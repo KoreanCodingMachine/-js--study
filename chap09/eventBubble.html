@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>이벤트 버블링</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div>
+            <button>클릭</button>
+        </div>
+    </header>
+    <script>
+        // button에 이벤트 리스너를 달아서는 안되고 , 버튼을 클릭했을 때 alert을 출력
+
+        $header = document.querySelector('header')
+        $header.addEventListener('click', () => {
+            alert('hello , event bubbling')
+        })
+    </script>
+</body>
+
+</html>

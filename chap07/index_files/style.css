@@ -1,0 +1,24 @@
+.flex-container {
+    width: 500px;
+    height: 800px;
+    padding: 15px;
+    border-radius: 5px;
+    background: #60B99A;
+    flex-wrap: wrap;
+    display: flex;
+    align-content: space-between
+}
+
+.flex-item {
+    margin: 10px;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    background: #4584b1;
+  }
+
+.grow1 {
+    align-self: flex-start;
+}
+

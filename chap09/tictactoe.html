@@ -30,56 +30,38 @@
 <body>
 
     <script>
-        // const body = document.body
+
         const { body } = document
         const $table = document.createElement('table')
         const $result = document.createElement('div')
 
-        // 2차원 정보를 담을 배열 
-        const rows = []
 
-        let turn = 'O'
-
+        // 승부 판단하기
 
         const checkWinner = (target) => {
             const rowIndex = target.parentNode.rowIndex
             const cellIndex = target.cellIndex
 
-            let hasWinner = false;
 
+            let hasWinner = false
 
-            // 가로줄 검사 
-
-            if (rows[rowIndex][0].textContent === turn &&
-                rows[rowIndex][1].textContent === turn &&
-                rows[rowIndex][2].textContent === turn) {
+            // 가로줄 검사
+            if (rows[rowIndex][0].textContent === turn && rows[rowIndex][1].textContent === turn && rows[rowIndex][2].textContent === turn) {
                 hasWinner = true
             }
 
-            //  세로줄 검사
-            if (rows[0][cellIndex].textContent === turn &&
-                rows[1][cellIndex].textContent === turn &&
-                rows[2][cellIndex].textContent === turn
-            ) {
+            // 세로줄 검사
+            if (rows[0][cellIndex].textContent === turn && rows[1][cellIndex].textContent === turn && rows[2][cellIndex].textContent === turn) {
                 hasWinner = true
             }
 
-            // 대각선 검사 1 
-
-            if (rows[0][0].textContent === turn &&
-                rows[1][1].textContent === turn &&
-                rows[2][2].textContent === turn
-            ) {
+            // 대각선 검사 1
+            if (rows[0][0].textContent === turn && rows[1][1].textContent === turn && rows[2][2].textContent === turn) {
                 hasWinner = true
             }
 
-
-            // 대각선 검사 2 
-
-            if (rows[0][2].textContent === turn &&
-                rows[1][1].textContent === turn &&
-                rows[2][0].textContent === turn
-            ) {
+            // 대각선 검사 2
+            if (rows[0][2].textContent === turn && rows[1][1].textContent === turn && rows[2][0].textContent === turn) {
                 hasWinner = true
             }
 
@@ -87,29 +69,25 @@
         }
 
 
-
+        // 차례 생성하기
+        let turn = 'O'
 
         const callback = (event) => {
-            // 빈 칸이 아닌 경우
+            // 칸이 이미 채워져 있으면 빈칸이 아니라고 콘솔에 출력 
+            // 반대 case의 경우 'O' 이면 -> 'X' , 'X'이면 'O'로 턴을 수정
             if (event.target.textContent !== '') {
                 console.log('빈 칸이 아닙니다.')
                 return
             }
-
-            // 빈 칸이면 
-            console.log('빈 칸입니다.')
             event.target.textContent = turn
             const hasWinner = checkWinner(event.target)
-
-            // 승자가 있으면 
+            // 승자가 있으면
             if (hasWinner) {
                 $result.textContent = `${turn}님이 승리`
                 $table.removeEventListener('click', callback)
                 return
             }
-
-            // 승자가 없으면 
-
+            // 승자가 없으면
             const draw = rows.flat().every((cell) => cell.textContent)
 
             if (draw) {
@@ -121,6 +99,17 @@
 
         }
 
+
+
+
+
+        // table 생성하기
+
+        // event.target은 태그 안의 어떤 것이든(이벤트가 발생한것으로부터) 동작한다.
+        // event.currentTarget은 addEventlistener가 정의한 그 객체만 동작함
+        // 즉 event.target으로 이벤트리스너를 호출하면 부모태그에게까지 전파되는 이벤트 버블링 현상이 발생한다. 
+
+        const rows = []
 
         for (let i = 1; i <= 3; i++) {
             const $tr = document.createElement('tr')
@@ -135,10 +124,8 @@
             $table.addEventListener('click', callback)
         }
 
-
         body.appendChild($table)
         body.appendChild($result)
-
     </script>
 </body>
 
