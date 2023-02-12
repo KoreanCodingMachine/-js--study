@@ -34,73 +34,78 @@
         const { body } = document
         const $table = document.createElement('table')
         const $result = document.createElement('div')
+        const rows = []
 
 
         // 승부 판단하기
-
         const checkWinner = (target) => {
-            const rowIndex = target.parentNode.rowIndex
-            const cellIndex = target.cellIndex
 
+            let rowIndex = target.parentNode.rowIndex
+            let cellIndex = target.cellIndex
+
+            // 각각의 셀 정보를 rows 배열로부터 가져옴
 
             let hasWinner = false
 
-            // 가로줄 검사
-            if (rows[rowIndex][0].textContent === turn && rows[rowIndex][1].textContent === turn && rows[rowIndex][2].textContent === turn) {
+            // 가로줄
+            if (rows[rowIndex][0].textContent === turn &&
+                rows[rowIndex][1].textContent === turn &&
+                rows[rowIndex][2].textContent === turn) {
                 hasWinner = true
             }
 
-            // 세로줄 검사
-            if (rows[0][cellIndex].textContent === turn && rows[1][cellIndex].textContent === turn && rows[2][cellIndex].textContent === turn) {
+            // 세로줄
+            if (rows[0][cellIndex].textContent === turn &&
+                rows[1][cellIndex].textContent === turn &&
+                rows[2][cellIndex].textContent === turn) {
                 hasWinner = true
             }
 
-            // 대각선 검사 1
-            if (rows[0][0].textContent === turn && rows[1][1].textContent === turn && rows[2][2].textContent === turn) {
+            // 대각선 1
+            if (rows[0][0].textContent === turn &&
+                rows[1][1].textContent === turn &&
+                rows[2][2].textContent === turn) {
                 hasWinner = true
             }
 
-            // 대각선 검사 2
-            if (rows[0][2].textContent === turn && rows[1][1].textContent === turn && rows[2][0].textContent === turn) {
+            // 대각선 2
+            if (rows[0][2].textContent === turn &&
+                rows[1][1].textContent === turn &&
+                rows[2][0].textContent === turn) {
                 hasWinner = true
             }
 
             return hasWinner
         }
 
-
         // 차례 생성하기
-        let turn = 'O'
+        let turn = 'o'
 
         const callback = (event) => {
-            // 칸이 이미 채워져 있으면 빈칸이 아니라고 콘솔에 출력 
-            // 반대 case의 경우 'O' 이면 -> 'X' , 'X'이면 'O'로 턴을 수정
             if (event.target.textContent !== '') {
-                console.log('빈 칸이 아닙니다.')
-                return
-            }
-            event.target.textContent = turn
-            const hasWinner = checkWinner(event.target)
-            // 승자가 있으면
-            if (hasWinner) {
-                $result.textContent = `${turn}님이 승리`
-                $table.removeEventListener('click', callback)
-                return
-            }
-            // 승자가 없으면
-            const draw = rows.flat().every((cell) => cell.textContent)
+                alert('값이 채워져 있습니다.')
+            } else {
+                event.target.textContent = turn
 
-            if (draw) {
-                $result.textContent = '무승부'
-                return
+                // 승자 판별
+                const hasWinner = checkWinner(event.target)
+
+                if (hasWinner) {
+                    $result.textContent = `${turn}님이 승자입니다.`
+                    $table.removeEventListener('click', callback)
+                    return
+                }
+
+                const draw = rows.flat().every(td => td.textContent)
+
+                if (draw) {
+                    $result.textContent = '무승부입니다.'
+                    return
+                }
+                // 턴 교체
+                turn = turn === 'o' ? 'x' : 'o'
             }
-
-            turn = turn === 'X' ? 'O' : 'X'
-
         }
-
-
-
 
 
         // table 생성하기
@@ -109,7 +114,6 @@
         // event.currentTarget은 addEventlistener가 정의한 그 객체만 동작함
         // 즉 event.target으로 이벤트리스너를 호출하면 부모태그에게까지 전파되는 이벤트 버블링 현상이 발생한다. 
 
-        const rows = []
 
         for (let i = 1; i <= 3; i++) {
             const $tr = document.createElement('tr')
@@ -123,6 +127,8 @@
             $table.appendChild($tr)
             $table.addEventListener('click', callback)
         }
+
+
 
         body.appendChild($table)
         body.appendChild($result)
