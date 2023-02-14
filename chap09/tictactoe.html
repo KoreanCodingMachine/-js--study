@@ -24,6 +24,12 @@
             margin: 0 auto;
             width: 300px;
         }
+
+        div {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 30px;
+        }
     </style>
 </head>
 
@@ -114,25 +120,20 @@
                 const filterdArray = rows.flat().filter((v) => !v.textContent)
                 const randomCell = filterdArray[Math.floor(Math.random() * filterdArray.length)]
                 randomCell.textContent = 'x'
-                // 승자 판별
-                const hasWinner = checkWinner(event.target)
 
                 if (hasWinner) {
-                    $result.textContent = `${turn}님이 승자입니다.`
-                    $table.removeEventListener('click', callback)
+                    $result.textContent = `승자는 ${turn}님 입니다.`
                     return
                 }
 
-                // 무승부일때
-                const draw = rows.flat().every(td => td.textContent)
+                const draw = rows.flat().every(v => v.textContent)
 
                 if (draw) {
                     $result.textContent = '무승부입니다.'
                     return
                 }
 
-                // 턴 교체
-                turn = turn === 'o' ? 'x' : 'o'
+                turn = turn === 'x' ? 'o' : 'x'
             }
 
         }

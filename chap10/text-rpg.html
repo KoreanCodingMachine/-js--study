@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>텍스트 RPG</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <form id="start-screen">
+        <input type="text" id="name-input" placeholder="주인공 이름을 입력하세요" />
+        <button id="start">시작</button>
+    </form>
+
+    <div>
+        <div id="hero-start">
+            <span id="hero-name"></span>
+            <span id="hero-level"></span>
+            <span id="hero-hp"></span>
+            <span id="hero-xp"></span>
+            <span id="hero-att"></span>
+        </div>
+        <form id="game-menu" style="display:none">
+            <div id="menu-1">1.모험</div>
+            <div id="menu-2">2.휴식</div>
+            <div id="menu-3">3.종료</div>
+            <input type="text" id="menu-input" />
+            <button id="menu-button">입력</button>
+        </form>
+        <form id="battle-menu" style="display:none">
+            <div id="battle-1">1.공격</div>
+            <div id="battle-2">2.회복</div>
+            <div id="battle-3">3.도망</div>
+            <input type="text" id="battle-input" />
+            <button id="battle-button">입력</button>
+        </form>
+        <div id="message"></div>
+        <div id="monster-start">
+            <span id="monster-name"></span>
+            <span id="monster-hp"></span>
+            <span id="monster-att"></span>
+        </div>
+    </div>
+
+    <script>
+
+        // 시작 화면
+        const $startScreen = document.querySelector('#start-screen')
+        // 게임 메뉴
+        const $gameMenu = document.querySelector('#game-menu')
+        // 배틀 메뉴
+        const $battleMenu = document.querySelector('#battle-menu')
+        // 주인공 이름
+        const $heroName = document.querySelector('#hero-name')
+        // 주인공 레벨
+        const $heroLevel = document.querySelector('#hero-level')
+        // 주인공 hp
+        const $heroHp = document.querySelector('#hero-hp')
+        // 주인공 xp
+        const $heroXp = document.querySelector('#hero-xp')
+        // 주인공 att(공격력)
+        const $heroAtt = document.querySelector('#hero-att')
+        // 몬스터 이름
+        const $monsterName = document.querySelector('#monster-name')
+        // 몬스터 hp
+        const $monsterHp = document.querySelector('#monster-hp')
+        // 몬스터 공격력
+        const $monsterAtt = document.querySelector('#monster-att')
+        // 메시지
+        const $message = document.querySelector('#message')
+
+        const hero = {
+            name: '',
+            lev: 1,
+            maxHp: 100,
+            hp: 100,
+            xp: 0,
+            att: 10,
+        }
+
+        let monster = null
+
+        const monsterList = [
+            { name: '슬라임', hp: 25, att: 10, xp: 10 },
+            { name: '스켈레톤', hp: 50, att: 15, xp: 20 },
+            { name: '마왕', hp: 150, att: 35, xp: 50 }
+        ]
+
+        $startScreen.addEventListener('submit', (event) => {
+            event.preventDefault()
+            const name = event.target['name-input'].value
+            $startScreen.style.display = 'none'
+            $gameMenu.style.display = 'block'
+            $heroName.textContent = name
+            $heroLevel.textContent = `${hero.lev}Lev`
+            $heroHp.textContent = `HP: ${hero.xp} / ${hero.maxHp}`
+            $heroXp.textContent = `XP: ${hero.xp} / ${15 * hero.lev}`
+            $heroAtt.textContent = `ATT: ${hero.att}`
+            hero.name = name
+        })
+
+        $gameMenu.addEventListener('submit', (event) => {
+            event.preventDefault()
+            const input = event.target['menu-input'].value
+            if (input === '1') {
+                $gameMenu.style.display = 'none'
+                $battleMenu.style.display = 'block'
+                monster = JSON.parse(JSON.stringify(monsterList[Math.floor(Math.random() * monsterList.length)]))
+                monster.maxHp = monster.hp
+                $monsterName.textContent = monster.name
+                $monsterHp.textContent = `HP: ${monster.hp} / ${monster.maxHp}`
+                $monsterAtt.textContent = `ATT: ${monster.att}`
+
+                const monster1 = JSON.parse(JSON.stringify(monsterList[0])) // 깊은 복사
+                const monster2 = monsterList[0] // 얕은 복사
+
+                monster1.name = '새 몬스터'
+                console.log(monsterList[0].name) // 슬라임
+
+                monster2.name = '새 몬스터'
+                console.log(monsterList[0].name) // 새 몬스터
+
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
