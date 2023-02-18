@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>텍스트 RPG</title>
+    <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="css/style.css" rel="stylesheet">
@@ -45,7 +45,6 @@
     </div>
 
     <script>
-
         // 시작 화면
         const $startScreen = document.querySelector('#start-screen')
         // 게임 메뉴
@@ -71,76 +70,38 @@
         // 메시지
         const $message = document.querySelector('#message')
 
-        const hero = {
-            name: '',
-            lev: 1,
-            maxHp: 100,
-            hp: 100,
-            xp: 0,
-            att: 10,
-            attack(monster) {
-                monster.hp -= this.att
-                this.hp -= monster.att
-            },
+        class Game {
+            constructor(name) {
+                this.monster = null
+                this.hero = null
+                this.monsterList = [
+                    { name: '슬라임', hp: 25, att: 10, xp: 10 },
+                    { name: '스켈레톤', hp: 50, att: 15, xp: 20 },
+                    { name: '마왕', hp: 150, att: 35, xp: 50 },
+                ]
+            }
+        }
+
+        class Hero {
+            constructor(game, name) {
+                this.game = game
+                this.name = name
+                this.lev = 1
+                this.maxHp = 100
+                this.hp = 100
+                this.xp = 0
+                this.att = 10
+            }
+            attack(target) {
+                target.hp -= this.att
+            }
             heal(monster) {
                 this.hp += 20
                 this.hp -= monster.att
             }
         }
 
-        let monster = null
-
-        const monsterList = [
-            { name: '슬라임', hp: 25, att: 10, xp: 10 },
-            { name: '스켈레톤', hp: 50, att: 15, xp: 20 },
-            { name: '마왕', hp: 150, att: 35, xp: 50 }
-        ]
-
-        $startScreen.addEventListener('submit', (event) => {
-            event.preventDefault()
-            const name = event.target['name-input'].value
-            $startScreen.style.display = 'none'
-            $gameMenu.style.display = 'block'
-            $heroName.textContent = name
-            $heroLevel.textContent = `${hero.lev}Lev`
-            $heroHp.textContent = `HP: ${hero.xp} / ${hero.maxHp}`
-            $heroXp.textContent = `XP: ${hero.xp} / ${15 * hero.lev}`
-            $heroAtt.textContent = `ATT: ${hero.att}`
-            hero.name = name
-        })
-
-        $gameMenu.addEventListener('submit', (event) => {
-            event.preventDefault()
-            const input = event.target['menu-input'].value
-            if (input === '1') {
-                $gameMenu.style.display = 'none'
-                $battleMenu.style.display = 'block'
-                monster = JSON.parse(JSON.stringify(monsterList[Math.floor(Math.random() * monsterList.length)]))
-                monster.maxHp = monster.hp
-                $monsterName.textContent = monster.name
-                $monsterHp.textContent = `HP: ${monster.hp} / ${monster.maxHp}`
-                $monsterAtt.textContent = `ATT: ${monster.att}`
-            }
-        })
-
-        $battleMenu.addEventListener('click', (event) => {
-            event.preventDefault()
-            const input = event.target['battle-input'].value
-            if (input === '1') {
-                hero.attack(monster)
-                monster.attack(hero)
-                $heroHp.textContent = `HP: ${hero.hp} / ${hero.maxHp}`
-                $monsterHp.textContent = `HP ${monster.hp} / ${monster.maxHp}`
-                $message.textContent = `${hero.att}의 데미지를 주고, ${monster.att}의 데미지를 받았다.`
-            } else if (input === '2') {
-
-            } else if (input === '3') {
-
-            }
-        })
-
     </script>
-
 </body>
 
 </html>
