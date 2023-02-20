@@ -12,8 +12,9 @@ Monster.prototype.attack = function (monster) {
   monster.hp -= this.att;
   this.hp -= monster.att;
 };
-
 Monster.prototype.heal = function (monster) {
   this.hp += 20;
   this.hp -= monster.att;
 };
+
+console.log(Monster);
