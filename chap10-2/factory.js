@@ -4,6 +4,7 @@ console.log(d1.getMonth() + 1); // 2
 
 console.log('Date', Date); // Date [Function: Date] (내장 함수)
 
+// 생성자함수는 객체를 리턴한다. + 객체의 초기상태를 정의한다.
 function Person(name, first, second, third) {
   this.name = name;
   this.first = first;
